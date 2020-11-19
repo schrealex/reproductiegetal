@@ -7,14 +7,6 @@ function App() {
     const [huidigeReproductieGetal, setHuidigeReproductieGetal] = useState(0);
     const [huidigeReproductieGetalDatum, setHuidigeReproductieGetalDatum] = useState('');
 
-    const getHuidigeReproductiegetal = () => {
-        return getReproductiegetal().then(({ data }) => {
-            const huidigeReproductiegetal = data.filter((d: Object) => (Object.keys(d).indexOf('Rt_low') !== -1 && Object.keys(d).indexOf('Rt_up') !== -1)).pop();
-            setHuidigeReproductieGetal(getGetalMetTweeDecimalen(getGemiddeldeVanArray([huidigeReproductiegetal.Rt_low, huidigeReproductiegetal.Rt_up])));
-            setHuidigeReproductieGetalDatum(huidigeReproductiegetal.Date);
-        })
-    }
-
     const getGemiddeldeVanArray = (array: Array<number>) => {
         return array.reduce((a, b) => a + b) / 2;
     }
@@ -24,14 +16,19 @@ function App() {
     };
 
     useEffect(() => {
-        getHuidigeReproductiegetal();
+        getReproductiegetal().then(({ data }) => {
+            const huidigeReproductiegetal = data.filter((d: Object) => (Object.keys(d).indexOf('Rt_low') !== -1 && Object.keys(d).indexOf('Rt_up') !== -1)).pop();
+            setHuidigeReproductieGetal(getGetalMetTweeDecimalen(getGemiddeldeVanArray([huidigeReproductiegetal.Rt_low, huidigeReproductiegetal.Rt_up])));
+            setHuidigeReproductieGetalDatum(huidigeReproductiegetal.Date);
+        })
     }, []);
 
     return (
         <div className="App">
             <div className="reproductiegetal-data">
                 Het laatst bekende COVID-19 reproductiegetal van <span className="datum">{huidigeReproductieGetalDatum}</span> is: <a
-                href="https://data.rivm.nl/geonetwork/srv/dut/catalog.search#/metadata/ed0699d1-c9d5-4436-8517-27eb993eab6e" target="_blank">
+                href="https://data.rivm.nl/geonetwork/srv/dut/catalog.search#/metadata/ed0699d1-c9d5-4436-8517-27eb993eab6e" target="_blank"
+                rel="noopener noreferrer">
                 <span className=" getal">{huidigeReproductieGetal}</span>
             </a>
                 <p className=" uitleg">
@@ -39,7 +36,7 @@ function App() {
                     één patiënt met COVID-19.
                 </p>
             </div>
-            <img className=" kaart" src=" Nederland.png" />
+            <img className=" kaart" src="./Nederland.png" alt="Kaart van Nederland" />
         </div>
     );
 }
