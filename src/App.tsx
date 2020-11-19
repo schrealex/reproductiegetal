@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import './App.scss';
 import { getReproductiegetal } from "./service/ReproductiegetalApi";
+import './App.scss';
+import nederland from './assets/images/Nederland.png'
 
 function App() {
 
@@ -36,7 +37,7 @@ function App() {
                     één patiënt met COVID-19.
                 </p>
             </div>
-            <img className=" kaart" src="./Nederland.png" alt="Kaart van Nederland" />
+            <img className=" kaart" src={nederland} alt="Kaart van Nederland" />
         </div>
     );
 }
