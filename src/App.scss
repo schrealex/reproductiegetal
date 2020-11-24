@@ -11,10 +11,7 @@ body {
   align-items: center;
   justify-content: center;
 
-  background-image: url('./assets/images/Nederland.png');
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-  background-position: center;
+  background: url('./assets/images/Nederland.png') no-repeat fixed center;
 }
 
 .App {
@@ -39,6 +36,7 @@ body {
 
     .datum {
       font-weight: bold;
+      white-space: nowrap;
     }
 
     a {
