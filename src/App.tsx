@@ -24,6 +24,7 @@ function App() {
         return data.find((d: any) => d.Date === getDatumVanTweeWekenTerug());
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const getLaatsteReproductieGetal = (data: Array<Object>): any => {
         return data.filter((d: Object) => (Object.keys(d).indexOf('Rt_low') !== -1 && Object.keys(d).indexOf('Rt_up') !== -1)).pop()
     }
@@ -40,6 +41,7 @@ function App() {
             }
 
         })
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (
