@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { getReproductiegetal } from "./service/ReproductiegetalApi";
 import './App.scss';
+import dayjs from "dayjs";
 
 function App() {
 
@@ -15,11 +16,29 @@ function App() {
         return Math.round((number + Number.EPSILON) * 100) / 100;
     };
 
+    const getDatumVanTweeWekenTerug = () => {
+        return dayjs(new Date()).subtract(14, 'day').format('YYYY-MM-DD');
+    }
+
+    const getReproductieGetalDataVanTweeWekenTerug = (data: Array<Object>) => {
+        return data.find((d: any) => d.Date === getDatumVanTweeWekenTerug());
+    }
+
+    const getLaatsteReproductieGetal = (data: Array<Object>): any => {
+        return data.filter((d: Object) => (Object.keys(d).indexOf('Rt_low') !== -1 && Object.keys(d).indexOf('Rt_up') !== -1)).pop()
+    }
+
     useEffect(() => {
         getReproductiegetal().then(({ data }) => {
-            const huidigeReproductiegetal = data.filter((d: Object) => (Object.keys(d).indexOf('Rt_low') !== -1 && Object.keys(d).indexOf('Rt_up') !== -1)).pop();
-            setHuidigeReproductieGetal(getGetalMetTweeDecimalen(getGemiddeldeVanArray([huidigeReproductiegetal.Rt_low, huidigeReproductiegetal.Rt_up])));
-            setHuidigeReproductieGetalDatum(huidigeReproductiegetal.Date);
+            const dataTweeWekenGeleden: any = getReproductieGetalDataVanTweeWekenTerug(data);
+            if (dataTweeWekenGeleden) {
+                setHuidigeReproductieGetal(getGetalMetTweeDecimalen(getGemiddeldeVanArray([Number(dataTweeWekenGeleden.Rt_low), Number(dataTweeWekenGeleden.Rt_up)])));
+                setHuidigeReproductieGetalDatum(dataTweeWekenGeleden.Date);
+            } else {
+                setHuidigeReproductieGetal(0);
+                setHuidigeReproductieGetalDatum(new Date().toString());
+            }
+
         })
     }, []);
 
